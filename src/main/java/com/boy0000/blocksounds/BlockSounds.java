@@ -99,9 +99,7 @@ public class BlockSounds {
 
     private String getSound(ConfigurationSection section, String key) {
         ConfigurationSection soundSection = section.getConfigurationSection(key);
-        return section.isString(key + "_sound")
-                ? section.getString(key + "_sound")
-                : soundSection != null
+        return soundSection != null
                 ? soundSection.getString("sound")
                 : null;
     }

@@ -1,30 +1,38 @@
-itempack:example_block_id:
-  place_sound: block.amethyst_block.place
-  break_sound: block.amethyst_block.break
-  hit_sound: block.amethyst_block.hit
-  step_sound: block.amethyst_block.step
-  fall_sound: block.amethyst_block.fall
+#The sounds are registered within the ItemsAdder block config
+# Use this only as reference for the format
+
+items:
+  my_test_block:
+    block_sounds:
+      place_sound: block.amethyst_block.place
+      break_sound: block.amethyst_block.break
+      hit_sound: block.amethyst_block.hit
+      step_sound: block.amethyst_block.step
+      fall_sound: block.amethyst_block.fall
 
 # This lets you set the individual sound volume and pitch per block
 # The above example should be all you need, but for those who want extra control this will work
-itempack:example_block_id2:
-  place:
-    sound: minecraft:block.amethyst_block.place
-    volume: 1.0
-    pitch: 0.8
-  break:
-    sound: minecraft:block.amethyst_block.break
-    volume: 1.0
-    pitch: 0.8
-  hit:
-    sound: minecraft:block.amethyst_block.hit
-    volume: 0.25
-    pitch: 0.5
-  step:
-    sound: minecraft:block.amethyst_block.step
-    volume: 0.15
-    pitch: 1.0
-  fall:
-    sound: minecraft:block.amethyst_block.fall
-    volume: 0.5
-    pitch: 0.75
+# These can be mixed and matched, so you can set the place sound volume and pitch, but leave the rest as default
+items:
+  my_test_block2:
+    block_sounds:
+      place:
+        sound: minecraft:block.amethyst_block.place
+        volume: 1.0
+        pitch: 0.8
+      break:
+        sound: minecraft:block.amethyst_block.break
+        volume: 1.0
+        pitch: 0.8
+      hit:
+        sound: minecraft:block.amethyst_block.hit
+        volume: 0.25
+        pitch: 0.5
+      step:
+        sound: minecraft:block.amethyst_block.step
+        volume: 0.15
+        pitch: 1.0
+      fall:
+        sound: minecraft:block.amethyst_block.fall
+        volume: 0.5
+        pitch: 0.75
