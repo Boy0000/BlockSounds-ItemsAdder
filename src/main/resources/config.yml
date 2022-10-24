@@ -1,4 +1,4 @@
-example_block_id:
+itempack:example_block_id:
   place_sound: block.amethyst_block.place
   break_sound: block.amethyst_block.break
   hit_sound: block.amethyst_block.hit
@@ -7,7 +7,7 @@ example_block_id:
 
 # This lets you set the individual sound volume and pitch per block
 # The above example should be all you need, but for those who want extra control this will work
-example_block_id2:
+itempack:example_block_id2:
   place:
     sound: minecraft:block.amethyst_block.place
     volume: 1.0

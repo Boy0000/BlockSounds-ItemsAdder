@@ -10,8 +10,10 @@ public class BlockSoundConfig {
     public static HashMap<String, BlockSounds> customSounds = new HashMap<>();
 
     public static void loadConfig() {
-        /*Set<ConfigurationSection> configs = ItemsAdder.getAllItems().stream().filter(i -> CustomBlock.byItemStack(i.getItemStack()) != null).map(s -> s.getConfig().getDefaultSection()).collect(Collectors.toSet());
-        configs.forEach(c -> c.getKeys(false).forEach(Bukkit::broadcastMessage));*/
+        /*ItemsAdder.getAllItems().stream().filter(Objects::nonNull)
+                .map(CustomStack::getNamespacedID)
+                .filter(namespacedID -> CustomBlock.getInstance(namespacedID) != null)
+                .forEach(s -> BlockSoundPlugin.plugin.logError(s));*/
         ConfigurationSection section = BlockSoundPlugin.plugin.getConfig();
         customSounds.clear();
         section.getKeys(false).stream().filter(Objects::nonNull).forEach(key ->
