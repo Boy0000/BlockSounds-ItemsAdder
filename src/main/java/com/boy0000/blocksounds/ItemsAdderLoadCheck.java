@@ -14,13 +14,14 @@ public class ItemsAdderLoadCheck implements Listener {
             BlockSoundConfig.loadConfig();
             BlockSoundPlugin.plugin.extractSoundJson();
 
-            Bukkit.getPluginManager().registerEvents(new CustomBlockSoundListener(), BlockSoundPlugin.plugin);
+            Bukkit.getPluginManager().registerEvents(new CustomFurnitureListener(), BlockSoundPlugin.plugin);
+            Bukkit.getPluginManager().registerEvents(new CustomBlockListener(), BlockSoundPlugin.plugin);
             Bukkit.getPluginManager().registerEvents(new VanillaBlockListener(), BlockSoundPlugin.plugin);
             new BlockSoundPackets().registerListener();
-            BlockSoundPlugin.plugin.logSuccess("BlockSounds has been enabled!");
+            BlockSoundPlugin.plugin.logSuccess("BlockSounds have been enabled!");
         } else {
             BlockSoundConfig.loadConfig();
-            BlockSoundPlugin.plugin.logSuccess("BlockSounds has been reloaded!");
+            BlockSoundPlugin.plugin.logSuccess("BlockSounds have been reloaded!");
         }
     }
 }

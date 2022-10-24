@@ -76,7 +76,7 @@ public class BlockSounds {
         stepPitch = VANILLA_STEP_PITCH;
         fallPitch = VANILLA_FALL_PITCH;
     }
-    
+
     public BlockSounds(ConfigurationSection section) {
         placeSound = getSound(section, "place");
         breakSound = getSound(section, "break");
@@ -99,9 +99,8 @@ public class BlockSounds {
 
     private String getSound(ConfigurationSection section, String key) {
         ConfigurationSection soundSection = section.getConfigurationSection(key);
-        return soundSection != null
-                ? soundSection.getString("sound")
-                : null;
+        return section.isString(key + "_sound") ? section.getString(key + "_sound")
+                : soundSection != null ? soundSection.getString("sound") : null;
     }
 
     private float getVolume(ConfigurationSection section, String type, float defaultValue) {

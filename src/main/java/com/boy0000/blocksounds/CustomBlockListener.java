@@ -12,7 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.GenericGameEvent;
 
-public class CustomBlockSoundListener implements Listener {
+public class CustomBlockListener implements Listener {
 
     @EventHandler
     public void onCustomBlockPlace(CustomBlockPlaceEvent event) {

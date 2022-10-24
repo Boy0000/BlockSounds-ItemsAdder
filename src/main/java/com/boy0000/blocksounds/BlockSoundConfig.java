@@ -1,5 +1,7 @@
 package com.boy0000.blocksounds;
 
+import dev.lone.itemsadder.api.CustomBlock;
+import dev.lone.itemsadder.api.CustomFurniture;
 import dev.lone.itemsadder.api.CustomStack;
 import dev.lone.itemsadder.api.ItemsAdder;
 import org.bukkit.Material;
@@ -15,13 +17,13 @@ public class BlockSoundConfig {
 
     public static void loadConfig() {
         Set<ConfigurationSection> iaBlocks = ItemsAdder.getAllItems().stream()
-                .map(CustomStack::getNamespacedID).filter(n -> CustomStack.getInstance(n).isBlock())
-                .map(s -> CustomStack.getInstance(s).getConfig().getConfigurationSection("items"))
+                .map(CustomStack::getNamespacedID).filter(id -> CustomBlock.isInRegistry(id) || CustomFurniture.isInRegistry(id))
+                .map(s -> CustomStack.getInstance(s).getConfig().getConfigurationSection("items").getConfigurationSection(s.split(":")[1]))
+                .filter(Objects::nonNull).filter(c -> c.isConfigurationSection("behaviours.block_sounds"))
                 .collect(Collectors.toSet());
 
         customSounds.clear();
-        iaBlocks.forEach(section -> section.getKeys(false).stream().filter(Objects::nonNull).forEach(key ->
-                customSounds.put(key, new BlockSounds(section.getConfigurationSection(key).getConfigurationSection("block_sounds")))));
+        iaBlocks.forEach(key -> customSounds.put(key.getName(), new BlockSounds(key.getConfigurationSection("behaviours.block_sounds"))));
         // use soundgroup for this so that it can be used on all blocks we replace sounds for
         customSounds.put(Material.STONE.createBlockData().getSoundGroup().toString(), new BlockSounds("stone"));
         customSounds.put(Material.OAK_LOG.createBlockData().getSoundGroup().toString(), new BlockSounds("wood"));
