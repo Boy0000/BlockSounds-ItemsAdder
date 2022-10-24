@@ -1,0 +1,5 @@
+name: BlockSounds
+version: '${version}'
+main: com.boy0000.blocksounds.BlockSoundPlugin
+api-version: 1.17
+depend: [ ItemsAdder, ProtocolLib ]
