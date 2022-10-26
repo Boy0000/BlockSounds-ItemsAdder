@@ -1,6 +1,10 @@
 package com.boy0000.blocksounds;
 
+import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
+
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class BlockSounds {
     public static String VANILLA_STONE_PLACE = "minecraft:required.stone.place";
@@ -99,8 +103,11 @@ public class BlockSounds {
 
     private String getSound(ConfigurationSection section, String key) {
         ConfigurationSection soundSection = section.getConfigurationSection(key);
-        return section.isString(key + "_sound") ? section.getString(key + "_sound")
-                : soundSection != null ? soundSection.getString("sound") : null;
+        String sound = soundSection != null && soundSection.isString("name") ? soundSection.getString("name") : null;
+        // In-case people use ENUMS this should work
+        if (Arrays.stream(Sound.values()).map(s -> s.getKey().toString()).collect(Collectors.toList()).contains(sound))
+            sound = Sound.valueOf(sound).getKey().toString();
+        return sound;
     }
 
     private float getVolume(ConfigurationSection section, String type, float defaultValue) {

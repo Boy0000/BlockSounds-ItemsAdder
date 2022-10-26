@@ -1,8 +1,6 @@
 package com.boy0000.blocksounds;
 
 import dev.lone.itemsadder.api.CustomBlock;
-import dev.lone.itemsadder.api.Events.CustomBlockBreakEvent;
-import dev.lone.itemsadder.api.Events.CustomBlockPlaceEvent;
 import org.bukkit.GameEvent;
 import org.bukkit.SoundCategory;
 import org.bukkit.block.Block;
@@ -13,8 +11,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.world.GenericGameEvent;
 
 public class CustomBlockListener implements Listener {
-
-    @EventHandler
+    // ItemsAdder plays this by default, so we don't need to play it again
+    /*@EventHandler
     public void onCustomBlockPlace(CustomBlockPlaceEvent event) {
         BlockSounds blockSound = BlockSoundConfig.customSounds.get(event.getNamespacedID());
         if (blockSound == null || !blockSound.hasPlaceSound()) return;
@@ -28,7 +26,7 @@ public class CustomBlockListener implements Listener {
         if (blockSound == null || !blockSound.hasBreakSound()) return;
 
         event.getBlock().getWorld().playSound(event.getBlock().getLocation(), blockSound.getBreakSound(), SoundCategory.BLOCKS, blockSound.getBreakVolume(), blockSound.getBreakPitch());
-    }
+    }*/
 
     @EventHandler
     public void onCustomBlockStep(GenericGameEvent event) {
