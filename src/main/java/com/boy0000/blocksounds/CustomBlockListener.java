@@ -38,7 +38,7 @@ public class CustomBlockListener implements Listener {
         if (customBlock == null) return;
 
         BlockSounds blockSound = BlockSoundConfig.customSounds.get(customBlock.getNamespacedID());
-        if (blockSound == null || !blockSound.hasBreakSound()) return;
+        if (blockSound == null || !blockSound.hasStepSound()) return;
 
         block.getWorld().playSound(block.getLocation(), blockSound.getStepSound(), SoundCategory.PLAYERS, blockSound.getStepVolume(), blockSound.getStepPitch());
     }
