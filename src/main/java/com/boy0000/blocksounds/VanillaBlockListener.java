@@ -1,6 +1,7 @@
 package com.boy0000.blocksounds;
 
 import dev.lone.itemsadder.api.CustomBlock;
+import dev.lone.itemsadder.api.CustomFurniture;
 import org.bukkit.GameEvent;
 import org.bukkit.Material;
 import org.bukkit.SoundCategory;
@@ -23,6 +24,7 @@ public class VanillaBlockListener implements Listener {
         ItemStack itemStack = event.getHand() == EquipmentSlot.HAND ? event.getPlayer().getInventory().getItemInMainHand() : event.getPlayer().getInventory().getItemInOffHand();
         Block block = event.getBlockPlaced();
 
+        if (CustomFurniture.byItemStack(itemStack) != null) return;
         if (CustomBlock.byItemStack(itemStack) != null) return;
         if (CustomBlock.byAlreadyPlaced(block) != null) return;
 
@@ -42,17 +44,6 @@ public class VanillaBlockListener implements Listener {
         block.getWorld().playSound(block.getLocation(), blockSound.getBreakSound(), SoundCategory.BLOCKS, blockSound.getBreakVolume(), blockSound.getBreakPitch());
 
     }
-
-    // TODO Packet stuff
-    /*@EventHandler
-    public void onBlockHit(BlockDamageEvent event) {
-        Block block = event.getBlock();
-        BlockSounds blockSound = CustomBlockConfig.customSounds.get(block.getType().getKey().toString());
-        if (CustomBlock.byAlreadyPlaced(block) != null || event.getInstaBreak()) return;
-        if (blockSound == null || !blockSound.hasHitSound()) return;
-
-        block.getWorld().playSound(block.getLocation(), getSound(block, SoundType.BREAK), SoundCategory.BLOCKS, blockSound.getBreakVolume(), blockSound.getBreakPitch());
-    }*/
 
     @EventHandler
     public void onBlockStep(GenericGameEvent event) {

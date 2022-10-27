@@ -20,7 +20,7 @@ public class BlockSoundConfig {
         Set<ConfigurationSection> iaBlocks = ItemsAdder.getAllItems().stream()
                 .map(CustomStack::getNamespacedID).filter(id -> CustomBlock.isInRegistry(id) || CustomFurniture.isInRegistry(id))
                 .map(s -> CustomStack.getInstance(s).getConfig().getConfigurationSection("items").getConfigurationSection(s.split(":")[1]))
-                .filter(Objects::nonNull).filter(c -> c.isConfigurationSection("specific_properties.block.sound"))
+                .filter(c -> c.isConfigurationSection("specific_properties.block.sound") || c.isConfigurationSection("behaviours.furniture.sound")).filter(Objects::nonNull)
                 .collect(Collectors.toSet());
 
         customSounds.clear();

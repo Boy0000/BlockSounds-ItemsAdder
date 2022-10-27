@@ -8,6 +8,7 @@ import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.BlockPosition;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import dev.lone.itemsadder.api.CustomBlock;
+import dev.lone.itemsadder.api.CustomFurniture;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 //TODO This doesnt have a repeating scheduler so it will only play sounds ones
 public class BlockSoundPackets {
@@ -39,12 +41,15 @@ public class BlockSoundPackets {
             final BlockPosition pos = packet.getBlockPositionModifier().getValues().get(0);
             final Block block = event.getPlayer().getWorld().getBlockAt(pos.getX(), pos.getY(), pos.getZ());
             final CustomBlock customBlock = CustomBlock.byAlreadyPlaced(block);
+            final CustomFurniture customFurniture = getFurnitureFromHitbox(block);
             final Location location = block.getLocation();
             final BukkitScheduler scheduler = Bukkit.getScheduler();
 
             BlockSounds blockSounds;
             if (customBlock != null) { // Custom Block
                 blockSounds = BlockSoundConfig.customSounds.get(customBlock.getNamespacedID());
+            } else if (customFurniture != null) { // Custom Furniture
+                blockSounds = BlockSoundConfig.customSounds.get(customFurniture.getNamespacedID());
             } else { // Vanilla Stone/Wood block
                 blockSounds = BlockSoundConfig.customSounds.get(block.getBlockData().getSoundGroup().toString());
             }
@@ -74,6 +79,15 @@ public class BlockSoundPackets {
             }
         }
     };
+
+    private CustomFurniture getFurnitureFromHitbox(Block block) {
+        List<CustomFurniture> furnitures = block.getWorld().getEntities().stream()
+                .filter(e -> block.getBoundingBox().contains(e.getLocation().toVector()))
+                .filter(e -> CustomFurniture.byAlreadySpawned(e) != null)
+                .map(CustomFurniture::byAlreadySpawned)
+        .collect(Collectors.toList());
+        return furnitures.isEmpty() ? null : furnitures.get(0);
+    }
 
     public void registerListener() {
         BlockSoundPlugin.protocolManager.addPacketListener(listener);

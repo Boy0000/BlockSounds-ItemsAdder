@@ -102,6 +102,7 @@ public class BlockSounds {
     }
 
     private String getSound(ConfigurationSection section, String key) {
+        if (section == null) return null;
         ConfigurationSection soundSection = section.getConfigurationSection(key);
         String sound = soundSection != null && soundSection.isString("name") ? soundSection.getString("name") : null;
         // In-case people use ENUMS this should work
@@ -111,17 +112,15 @@ public class BlockSounds {
     }
 
     private float getVolume(ConfigurationSection section, String type, float defaultValue) {
+        if (section == null) return defaultValue;
         ConfigurationSection soundSection = section.getConfigurationSection(type);
-        if (soundSection == null) {
-            return (float) section.getDouble("volume", defaultValue);
-        } else return defaultValue;
+        return soundSection == null ? (float) section.getDouble("volume", defaultValue) : defaultValue;
     }
 
     private float getPitch(ConfigurationSection section, String type, float defaultValue) {
+        if (section == null) return defaultValue;
         ConfigurationSection soundSection = section.getConfigurationSection(type);
-        if (soundSection != null) {
-            return (float) soundSection.getDouble("pitch", defaultValue);
-        } else return defaultValue;
+        return soundSection != null ? (float) soundSection.getDouble("pitch", defaultValue) : defaultValue;
     }
 
     public boolean hasPlaceSound() {
