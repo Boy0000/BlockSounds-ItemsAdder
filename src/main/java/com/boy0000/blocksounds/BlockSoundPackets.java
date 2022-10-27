@@ -14,13 +14,13 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.SoundCategory;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 //TODO This doesnt have a repeating scheduler so it will only play sounds ones
 public class BlockSoundPackets {
@@ -81,12 +81,16 @@ public class BlockSoundPackets {
     };
 
     private CustomFurniture getFurnitureFromHitbox(Block block) {
-        List<CustomFurniture> furnitures = block.getWorld().getEntities().stream()
-                .filter(e -> block.getBoundingBox().contains(e.getLocation().toVector()))
-                .filter(e -> CustomFurniture.byAlreadySpawned(e) != null)
-                .map(CustomFurniture::byAlreadySpawned)
-        .collect(Collectors.toList());
-        return furnitures.isEmpty() ? null : furnitures.get(0);
+        try {
+            return Bukkit.getScheduler().callSyncMethod(BlockSoundPlugin.plugin, () -> {
+                for (Entity e : block.getWorld().getNearbyEntities(block.getBoundingBox()))
+                    if (CustomFurniture.byAlreadySpawned(e) != null)
+                        return CustomFurniture.byAlreadySpawned(e);
+                return null;
+            }).get();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public void registerListener() {
