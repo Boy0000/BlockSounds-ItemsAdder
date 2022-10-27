@@ -69,7 +69,7 @@ public class CustomFurnitureListener implements Listener {
         block.getWorld().playSound(block.getLocation(), blockSound.getFallSound(), SoundCategory.PLAYERS, blockSound.getFallVolume(), blockSound.getFallPitch());
     }
 
-    private CustomFurniture getFurnitureFromHitbox(Block block) {
+    public static CustomFurniture getFurnitureFromHitbox(Block block) {
         for (Entity e : block.getWorld().getNearbyEntities(block.getBoundingBox())) {
             if (CustomFurniture.byAlreadySpawned(e) != null) {
                 return CustomFurniture.byAlreadySpawned(e);

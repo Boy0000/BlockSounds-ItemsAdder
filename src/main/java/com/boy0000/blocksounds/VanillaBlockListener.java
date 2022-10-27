@@ -53,6 +53,7 @@ public class VanillaBlockListener implements Listener {
         Block block = entity.getLocation().getBlock().getRelative(BlockFace.DOWN);
         BlockSounds blockSound = BlockSoundConfig.customSounds.get(block.getBlockData().getSoundGroup().toString());
         if (CustomBlock.byAlreadyPlaced(block) != null) return;
+        if (CustomFurnitureListener.getFurnitureFromHitbox(block) != null) return;
         if (blockSound == null || !blockSound.hasStepSound()) return;
         block.getWorld().playSound(block.getLocation(), getSound(block, SoundType.STEP), SoundCategory.PLAYERS, blockSound.getStepVolume(), blockSound.getStepPitch());
     }

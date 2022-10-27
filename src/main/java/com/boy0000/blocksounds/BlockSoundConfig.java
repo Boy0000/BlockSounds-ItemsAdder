@@ -4,7 +4,6 @@ import dev.lone.itemsadder.api.CustomBlock;
 import dev.lone.itemsadder.api.CustomFurniture;
 import dev.lone.itemsadder.api.CustomStack;
 import dev.lone.itemsadder.api.ItemsAdder;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -24,11 +23,15 @@ public class BlockSoundConfig {
                 .collect(Collectors.toSet());
 
         customSounds.clear();
-        iaBlocks.forEach(key -> customSounds.put(getNamespace(key) + ":" + key.getName(), new BlockSounds(key.getConfigurationSection("specific_properties.block.sound"))));
+        iaBlocks.forEach(key -> customSounds.put(
+                getNamespace(key) + ":" + key.getName(),
+                new BlockSounds(key.isConfigurationSection("specific_properties.block.sound")
+                        ? key.getConfigurationSection("specific_properties.block.sound")
+                        : key.getConfigurationSection("behaviours.furniture.sound")))
+        );
         // use soundgroup for this so that it can be used on all blocks we replace sounds for
         customSounds.put(Material.STONE.createBlockData().getSoundGroup().toString(), new BlockSounds("stone"));
         customSounds.put(Material.OAK_LOG.createBlockData().getSoundGroup().toString(), new BlockSounds("wood"));
-        Bukkit.broadcastMessage(BlockSoundConfig.customSounds.containsKey("myitems:red_block") + "");
     }
 
     private static String getNamespace(ConfigurationSection section) {
