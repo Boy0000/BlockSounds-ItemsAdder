@@ -39,7 +39,12 @@ public final class BlockSoundPlugin extends JavaPlugin {
         Path oldPath = Path.of(this.getDataFolder().getAbsolutePath().replace("\\", "/") + "/sounds.json");
         Path newPath = Path.of(this.getDataFolder().getParentFile().getAbsolutePath().replace("\\", "/") + "/ItemsAdder/data/resource_pack/assets/minecraft/sounds.json");
         File newFile = newPath.toFile();
-        if (newFile.exists()) {
+        boolean empty = false;
+        try {
+            empty = Files.readString(newPath).isEmpty();
+        } catch (IOException ignored) {
+        }
+        if (newFile.exists() && !empty) {
             try (JsonReader oldReader = new JsonReader(Files.newBufferedReader(oldPath)); JsonReader newReader = new JsonReader(Files.newBufferedReader(newFile.toPath()))) {
                 JsonParser parser = new JsonParser();
                 JsonObject oldJson = parser.parse(oldReader).getAsJsonObject();
@@ -54,6 +59,13 @@ public final class BlockSoundPlugin extends JavaPlugin {
                 e.printStackTrace();
             }
         } else {
+            if (empty) {
+                try {
+                    Files.delete(newPath);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
             try {
                 Files.copy(oldPath, newPath);
                 logSuccess("Copied sounds.json to ItemsAdder's resource pack!");
