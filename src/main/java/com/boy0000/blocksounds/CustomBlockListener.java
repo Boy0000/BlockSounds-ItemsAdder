@@ -6,8 +6,10 @@ import org.bukkit.SoundCategory;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.world.GenericGameEvent;
 
 public class CustomBlockListener implements Listener {
@@ -32,6 +34,7 @@ public class CustomBlockListener implements Listener {
     public void onCustomBlockStep(GenericGameEvent event) {
         Entity entity = event.getEntity();
         if (event.getEvent() != GameEvent.STEP || entity == null || !event.getLocation().isWorldLoaded()) return;
+        if (!(entity instanceof LivingEntity)) return;
 
         Block block = entity.getLocation().getBlock().getRelative(BlockFace.DOWN);
         CustomBlock customBlock = CustomBlock.byAlreadyPlaced(block);
@@ -47,6 +50,8 @@ public class CustomBlockListener implements Listener {
     public void onCustomBlockFall(GenericGameEvent event) {
         Entity entity = event.getEntity();
         if (event.getEvent() != GameEvent.HIT_GROUND || entity == null || !event.getLocation().isWorldLoaded()) return;
+        EntityDamageEvent cause = entity.getLastDamageCause();
+        if (!(entity instanceof LivingEntity) || cause == null || cause.getCause() != EntityDamageEvent.DamageCause.FALL) return;
 
         Block block = entity.getLocation().getBlock().getRelative(BlockFace.DOWN);
         CustomBlock customBlock = CustomBlock.byAlreadyPlaced(block);
