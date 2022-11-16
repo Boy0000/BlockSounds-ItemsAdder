@@ -13,22 +13,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.world.GenericGameEvent;
 
 public class CustomBlockListener implements Listener {
-    // ItemsAdder plays this by default, so we don't need to play it again
-    /*@EventHandler
-    public void onCustomBlockPlace(CustomBlockPlaceEvent event) {
-        BlockSounds blockSound = BlockSoundConfig.customSounds.get(event.getNamespacedID());
-        if (blockSound == null || !blockSound.hasPlaceSound()) return;
-
-        event.getBlock().getWorld().playSound(event.getBlock().getLocation(), blockSound.getPlaceSound(), SoundCategory.BLOCKS, blockSound.getPlaceVolume(), blockSound.getPlacePitch());
-    }
-
-    @EventHandler
-    public void onCustomBlockBreak(CustomBlockBreakEvent event) {
-        BlockSounds blockSound = BlockSoundConfig.customSounds.get(event.getNamespacedID());
-        if (blockSound == null || !blockSound.hasBreakSound()) return;
-
-        event.getBlock().getWorld().playSound(event.getBlock().getLocation(), blockSound.getBreakSound(), SoundCategory.BLOCKS, blockSound.getBreakVolume(), blockSound.getBreakPitch());
-    }*/
 
     @EventHandler
     public void onCustomBlockStep(GenericGameEvent event) {
