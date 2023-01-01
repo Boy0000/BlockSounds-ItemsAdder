@@ -26,7 +26,7 @@ import java.util.Map;
 public class BlockSoundPackets {
     private final Map<Location, BukkitScheduler> blockBreakers = new HashMap<>();
     private final List<Block> blockWithActiveSound = new ArrayList<>();
-    private final PacketAdapter listener = new PacketAdapter(BlockSoundPlugin.plugin, ListenerPriority.LOW, PacketType.Play.Client.BLOCK_DIG) {
+    private final PacketAdapter digListener = new PacketAdapter(BlockSoundPlugin.plugin, ListenerPriority.LOW, PacketType.Play.Client.BLOCK_DIG) {
         @Override
         public void onPacketReceiving(final PacketEvent event) {
             if (event.getPlayer().getGameMode() == GameMode.CREATIVE) return;
@@ -94,11 +94,11 @@ public class BlockSoundPackets {
     }
 
     public void registerListener() {
-        BlockSoundPlugin.protocolManager.addPacketListener(listener);
+        BlockSoundPlugin.protocolManager.addPacketListener(digListener);
     }
 
     public void unregisterListener() {
-        BlockSoundPlugin.protocolManager.removePacketListener(listener);
+        BlockSoundPlugin.protocolManager.removePacketListener(digListener);
     }
 
 }

@@ -7,6 +7,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -19,6 +20,7 @@ public class CustomBlockListener implements Listener {
         Entity entity = event.getEntity();
         if (event.getEvent() != GameEvent.STEP || entity == null || !event.getLocation().isWorldLoaded()) return;
         if (!(entity instanceof LivingEntity)) return;
+        if (entity instanceof Player player && player.isSneaking()) return;
 
         Block block = entity.getLocation().getBlock().getRelative(BlockFace.DOWN);
         CustomBlock customBlock = CustomBlock.byAlreadyPlaced(block);
