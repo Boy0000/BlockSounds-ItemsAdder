@@ -4,16 +4,18 @@ import dev.lone.itemsadder.api.CustomBlock;
 import dev.lone.itemsadder.api.CustomFurniture;
 import dev.lone.itemsadder.api.CustomStack;
 import dev.lone.itemsadder.api.ItemsAdder;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class BlockSoundConfig {
-    public static HashMap<String, BlockSounds> customSounds = new HashMap<>();
+    private static HashMap<String, BlockSounds> customSounds = new HashMap<>();
 
     public static void loadConfig() {
         Set<ConfigurationSection> iaBlocks = ItemsAdder.getAllItems().stream()
@@ -32,6 +34,10 @@ public class BlockSoundConfig {
         // use soundgroup for this so that it can be used on all blocks we replace sounds for
         customSounds.put(Material.STONE.createBlockData().getSoundGroup().toString(), new BlockSounds("stone"));
         customSounds.put(Material.OAK_LOG.createBlockData().getSoundGroup().toString(), new BlockSounds("wood"));
+    }
+
+    public static Map<String, BlockSounds> getBlockSounds() {
+        return customSounds;
     }
 
     private static String getNamespace(ConfigurationSection section) {

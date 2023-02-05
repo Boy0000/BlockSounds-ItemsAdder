@@ -22,7 +22,7 @@ public class CustomFurnitureListener implements Listener {
         if (furniture == null) return;
         Entity armorStand = furniture.getArmorstand();
         if (armorStand == null || !armorStand.getLocation().isWorldLoaded()) return;
-        BlockSounds blockSound = BlockSoundConfig.customSounds.get(furniture.getNamespacedID());
+        BlockSounds blockSound = BlockSoundConfig.getBlockSounds().get(furniture.getNamespacedID());
         if (blockSound == null || !blockSound.hasPlaceSound()) return;
         armorStand.getWorld().playSound(armorStand.getLocation(), blockSound.getPlaceSound(), SoundCategory.BLOCKS, blockSound.getPlaceVolume(), blockSound.getPlacePitch());
     }
@@ -33,7 +33,7 @@ public class CustomFurnitureListener implements Listener {
         if (furniture == null) return;
         Entity armorStand = furniture.getArmorstand();
         if (armorStand == null || !armorStand.getLocation().isWorldLoaded()) return;
-        BlockSounds blockSound = BlockSoundConfig.customSounds.get(furniture.getNamespacedID());
+        BlockSounds blockSound = BlockSoundConfig.getBlockSounds().get(furniture.getNamespacedID());
         if (blockSound == null || !blockSound.hasBreakSound()) return;
 
         armorStand.getWorld().playSound(armorStand.getLocation(), blockSound.getBreakSound(), SoundCategory.BLOCKS, blockSound.getBreakVolume(), blockSound.getBreakPitch());
@@ -48,7 +48,7 @@ public class CustomFurnitureListener implements Listener {
         CustomFurniture customFurniture = getFurnitureFromHitbox(block);
         if (customFurniture == null) return;
 
-        BlockSounds blockSound = BlockSoundConfig.customSounds.get(customFurniture.getNamespacedID());
+        BlockSounds blockSound = BlockSoundConfig.getBlockSounds().get(customFurniture.getNamespacedID());
         if (blockSound == null || !blockSound.hasStepSound()) return;
 
         block.getWorld().playSound(block.getLocation(), blockSound.getStepSound(), SoundCategory.PLAYERS, blockSound.getStepVolume(), blockSound.getStepPitch());
@@ -63,7 +63,7 @@ public class CustomFurnitureListener implements Listener {
         CustomFurniture customFurniture = getFurnitureFromHitbox(block);
         if (customFurniture == null) return;
 
-        BlockSounds blockSound = BlockSoundConfig.customSounds.get(customFurniture.getNamespacedID());
+        BlockSounds blockSound = BlockSoundConfig.getBlockSounds().get(customFurniture.getNamespacedID());
         if (blockSound == null || !blockSound.hasFallSound()) return;
 
         block.getWorld().playSound(block.getLocation(), blockSound.getFallSound(), SoundCategory.PLAYERS, blockSound.getFallVolume(), blockSound.getFallPitch());

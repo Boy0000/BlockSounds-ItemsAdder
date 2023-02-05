@@ -48,11 +48,11 @@ public class BlockSoundPackets {
 
             BlockSounds blockSounds;
             if (customBlock != null) { // Custom Block
-                blockSounds = BlockSoundConfig.customSounds.get(customBlock.getNamespacedID());
+                blockSounds = BlockSoundConfig.getBlockSounds().get(customBlock.getNamespacedID());
             } else if (customFurniture != null) { // Custom Furniture
-                blockSounds = BlockSoundConfig.customSounds.get(customFurniture.getNamespacedID());
+                blockSounds = BlockSoundConfig.getBlockSounds().get(customFurniture.getNamespacedID());
             } else { // Vanilla Stone/Wood block
-                blockSounds = BlockSoundConfig.customSounds.get(block.getBlockData().getSoundGroup().toString());
+                blockSounds = BlockSoundConfig.getBlockSounds().get(block.getBlockData().getSoundGroup().toString());
             }
 
             if (type == EnumWrappers.PlayerDigType.START_DESTROY_BLOCK) {

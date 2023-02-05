@@ -28,7 +28,7 @@ public class VanillaBlockListener implements Listener {
         if (CustomBlock.byItemStack(itemStack) != null) return;
         if (CustomBlock.byAlreadyPlaced(block) != null) return;
 
-        BlockSounds blockSound = BlockSoundConfig.customSounds.get(block.getBlockData().getSoundGroup().toString());
+        BlockSounds blockSound = BlockSoundConfig.getBlockSounds().get(block.getBlockData().getSoundGroup().toString());
         if (blockSound == null || !blockSound.hasPlaceSound()) return;
 
         block.getWorld().playSound(block.getLocation(), blockSound.getPlaceSound(), SoundCategory.BLOCKS, blockSound.getPlaceVolume(), blockSound.getPlacePitch());
@@ -37,7 +37,7 @@ public class VanillaBlockListener implements Listener {
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
         Block block = event.getBlock();
-        BlockSounds blockSound = BlockSoundConfig.customSounds.get(block.getBlockData().getSoundGroup().toString());
+        BlockSounds blockSound = BlockSoundConfig.getBlockSounds().get(block.getBlockData().getSoundGroup().toString());
         if (CustomBlock.byAlreadyPlaced(block) != null) return;
         if (blockSound == null || !blockSound.hasBreakSound()) return;
 
@@ -51,7 +51,7 @@ public class VanillaBlockListener implements Listener {
         if (event.getEvent() != GameEvent.STEP || entity == null || !event.getLocation().isWorldLoaded()) return;
 
         Block block = entity.getLocation().getBlock().getRelative(BlockFace.DOWN);
-        BlockSounds blockSound = BlockSoundConfig.customSounds.get(block.getBlockData().getSoundGroup().toString());
+        BlockSounds blockSound = BlockSoundConfig.getBlockSounds().get(block.getBlockData().getSoundGroup().toString());
         if (CustomBlock.byAlreadyPlaced(block) != null) return;
         if (CustomFurnitureListener.getFurnitureFromHitbox(block) != null) return;
         if (blockSound == null || !blockSound.hasStepSound()) return;
@@ -64,7 +64,7 @@ public class VanillaBlockListener implements Listener {
         if (event.getEvent() != GameEvent.HIT_GROUND || entity == null || !event.getLocation().isWorldLoaded()) return;
 
         Block block = entity.getLocation().getBlock().getRelative(BlockFace.DOWN);
-        BlockSounds blockSound = BlockSoundConfig.customSounds.get(block.getBlockData().getSoundGroup().toString());
+        BlockSounds blockSound = BlockSoundConfig.getBlockSounds().get(block.getBlockData().getSoundGroup().toString());
         if (CustomBlock.byAlreadyPlaced(block) != null) return;
         if (blockSound == null || !blockSound.hasFallSound()) return;
 

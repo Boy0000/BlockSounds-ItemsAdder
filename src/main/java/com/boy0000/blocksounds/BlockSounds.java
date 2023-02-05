@@ -1,5 +1,7 @@
 package com.boy0000.blocksounds;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -106,7 +108,7 @@ public class BlockSounds {
         ConfigurationSection soundSection = section.getConfigurationSection(key);
         String sound = soundSection != null && soundSection.isString("name") ? soundSection.getString("name") : null;
         // In-case people use ENUMS this should work
-        if (Arrays.stream(Sound.values()).map(s -> s.getKey().toString()).collect(Collectors.toList()).contains(sound))
+        if (Arrays.stream(Sound.values()).map(s -> s.getKey().toString()).toList().contains(sound))
             sound = Sound.valueOf(sound).getKey().toString();
         return sound;
     }
