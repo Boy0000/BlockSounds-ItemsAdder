@@ -20,34 +20,26 @@ public class CustomBlockListener implements Listener {
     @EventHandler
     public void onCustomBlockStep(GenericGameEvent event) {
         Entity entity = event.getEntity();
-        if (event.getEvent() != GameEvent.STEP || entity == null || !event.getLocation().isWorldLoaded()) return;
+        GameEvent gameEvent = event.getEvent();
+        if (gameEvent != GameEvent.HIT_GROUND && gameEvent != GameEvent.STEP) return;
+        if (entity == null || !event.getLocation().isWorldLoaded()) return;
         if (!(entity instanceof LivingEntity)) return;
         if (entity instanceof Player player && player.isSneaking()) return;
 
-        Block block = entity.getLocation().getBlock().getRelative(BlockFace.DOWN);
+        Block currentBlock = entity.getLocation().getBlock();
+        Block block = currentBlock.getType().isAir() ? currentBlock.getRelative(BlockFace.DOWN) : currentBlock;
         CustomBlock customBlock = CustomBlock.byAlreadyPlaced(block);
         if (customBlock == null) return;
 
         BlockSounds blockSound = BlockSoundConfig.getBlockSounds().get(customBlock.getNamespacedID());
-        if (blockSound == null || !blockSound.hasStepSound()) return;
+        if (blockSound == null) return;
+        if (gameEvent == GameEvent.STEP && !blockSound.hasStepSound()) return;
+        if (gameEvent == GameEvent.HIT_GROUND && !blockSound.hasFallSound()) return;
 
-        block.getWorld().playSound(block.getLocation(), blockSound.getStepSound(), SoundCategory.PLAYERS, blockSound.getStepVolume(), blockSound.getStepPitch());
-    }
+        String sound = gameEvent == GameEvent.STEP ? blockSound.getStepSound() : blockSound.getFallSound();
+        float volume = gameEvent == GameEvent.STEP ? blockSound.getStepVolume() : blockSound.getFallVolume();
+        float pitch = gameEvent == GameEvent.STEP ? blockSound.getStepPitch() : blockSound.getFallPitch();
 
-    @EventHandler
-    public void onCustomBlockFall(GenericGameEvent event) {
-        Entity entity = event.getEntity();
-        if (event.getEvent() != GameEvent.HIT_GROUND || entity == null || !event.getLocation().isWorldLoaded()) return;
-        EntityDamageEvent cause = entity.getLastDamageCause();
-        if (!(entity instanceof LivingEntity) || cause == null || cause.getCause() != EntityDamageEvent.DamageCause.FALL) return;
-
-        Block block = entity.getLocation().getBlock().getRelative(BlockFace.DOWN);
-        CustomBlock customBlock = CustomBlock.byAlreadyPlaced(block);
-        if (customBlock == null) return;
-
-        BlockSounds blockSound = BlockSoundConfig.getBlockSounds().get(customBlock.getNamespacedID());
-        if (blockSound == null || !blockSound.hasFallSound()) return;
-
-        block.getWorld().playSound(block.getLocation(), blockSound.getFallSound(), SoundCategory.PLAYERS, blockSound.getFallVolume(), blockSound.getFallPitch());
+        block.getWorld().playSound(block.getLocation(), sound, SoundCategory.PLAYERS, volume, pitch);
     }
 }
