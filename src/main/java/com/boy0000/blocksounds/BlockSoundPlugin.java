@@ -5,6 +5,7 @@ import com.comphenix.protocol.ProtocolManager;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
+import dev.lone.itemsadder.api.ItemsAdder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -13,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -39,6 +41,7 @@ public final class BlockSoundPlugin extends JavaPlugin {
         Path oldPath = Path.of(this.getDataFolder().getAbsolutePath().replace("\\", "/") + "/sounds.json");
         Path newPath = Path.of(this.getDataFolder().getParentFile().getAbsolutePath().replace("\\", "/") + "/ItemsAdder/data/resource_pack/assets/minecraft/sounds.json");
         File newFile = newPath.toFile();
+        if (!newFile.getParentFile().exists()) newFile.getParentFile().mkdirs();
         boolean empty = false;
         try {
             empty = Files.readString(newPath).isEmpty();
@@ -46,9 +49,8 @@ public final class BlockSoundPlugin extends JavaPlugin {
         }
         if (newFile.exists() && !empty) {
             try (JsonReader oldReader = new JsonReader(Files.newBufferedReader(oldPath)); JsonReader newReader = new JsonReader(Files.newBufferedReader(newFile.toPath()))) {
-                JsonParser parser = new JsonParser();
-                JsonObject oldJson = parser.parse(oldReader).getAsJsonObject();
-                JsonObject newJson = parser.parse(newReader).getAsJsonObject();
+                JsonObject oldJson = JsonParser.parseReader(oldReader).getAsJsonObject();
+                JsonObject newJson = JsonParser.parseReader(newReader).getAsJsonObject();
                 for (String key : oldJson.entrySet().stream().map(Map.Entry::getKey).collect(Collectors.toSet())) {
                     if (!newJson.has(key)) {
                         newJson.add(key, oldJson.get(key));

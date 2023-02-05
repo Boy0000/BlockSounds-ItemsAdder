@@ -30,6 +30,7 @@ public class BlockSoundPackets {
         @Override
         public void onPacketReceiving(final PacketEvent event) {
             if (event.getPlayer().getGameMode() == GameMode.CREATIVE) return;
+            if (event.getPacket().getHands().read(0) != EnumWrappers.Hand.MAIN_HAND) return;
 
             final PacketContainer packet = event.getPacket();
             EnumWrappers.PlayerDigType type;
