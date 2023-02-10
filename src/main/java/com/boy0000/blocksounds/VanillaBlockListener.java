@@ -6,6 +6,8 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -45,49 +47,25 @@ public class VanillaBlockListener implements Listener {
     @EventHandler
     public void onBlockStep(GenericGameEvent event) {
         Entity entity = event.getEntity();
-        if (event.getEvent() != GameEvent.STEP || entity == null || !event.getLocation().isWorldLoaded()) return;
+        GameEvent gameEvent = event.getEvent();
+        if (gameEvent != GameEvent.HIT_GROUND && gameEvent != GameEvent.STEP) return;
+        if (entity == null || !event.getLocation().isWorldLoaded()) return;
+        if (!(entity instanceof LivingEntity)) return;
+        if (entity instanceof Player player && player.isSneaking()) return;
 
-        Block block = entity.getLocation().getBlock().getRelative(BlockFace.DOWN);
-        BlockSounds blockSound = BlockSoundConfig.getBlockSounds().get(block.getBlockData().getSoundGroup().toString());
+        Block currentBlock = entity.getLocation().getBlock();
+        Block block = currentBlock.getType().isAir() ? currentBlock.getRelative(BlockFace.DOWN) : currentBlock;
         if (CustomBlock.byAlreadyPlaced(block) != null) return;
-        if (CustomFurnitureListener.getFurnitureFromHitbox(block) != null) return;
-        if (blockSound == null || !blockSound.hasStepSound()) return;
-        block.getWorld().playSound(block.getLocation(), getSound(block, SoundType.STEP), SoundCategory.PLAYERS, blockSound.getStepVolume(), blockSound.getStepPitch());
-    }
 
-    @EventHandler
-    public void onBlockFall(GenericGameEvent event) {
-        Entity entity = event.getEntity();
-        if (event.getEvent() != GameEvent.HIT_GROUND || entity == null || !event.getLocation().isWorldLoaded()) return;
-
-        Block block = entity.getLocation().getBlock().getRelative(BlockFace.DOWN);
         BlockSounds blockSound = BlockSoundConfig.getBlockSounds().get(block.getBlockData().getSoundGroup().toString());
-        if (CustomBlock.byAlreadyPlaced(block) != null) return;
-        if (blockSound == null || !blockSound.hasFallSound()) return;
+        if (blockSound == null) return;
+        if (gameEvent == GameEvent.STEP && !blockSound.hasStepSound()) return;
+        if (gameEvent == GameEvent.HIT_GROUND && !blockSound.hasFallSound()) return;
 
-        block.getWorld().playSound(block.getLocation(), getSound(block, SoundType.FALL), SoundCategory.PLAYERS, blockSound.getFallVolume(), blockSound.getFallPitch());
-    }
+        String sound = gameEvent == GameEvent.STEP ? blockSound.getStepSound() : blockSound.getFallSound();
+        float volume = gameEvent == GameEvent.STEP ? blockSound.getStepVolume() : blockSound.getFallVolume();
+        float pitch = gameEvent == GameEvent.STEP ? blockSound.getStepPitch() : blockSound.getFallPitch();
 
-    private String getSound(Block block, SoundType type) {
-        SoundGroup group = block.getBlockData().getSoundGroup();
-        boolean isWood = group == Material.OAK_LOG.createBlockData().getSoundGroup();
-        switch (type) {
-            case PLACE:
-                return isWood ? BlockSounds.VANILLA_WOOD_PLACE : BlockSounds.VANILLA_STONE_PLACE;
-            case BREAK:
-                return isWood ? BlockSounds.VANILLA_WOOD_BREAK : BlockSounds.VANILLA_STONE_BREAK;
-            case HIT:
-                return isWood ? BlockSounds.VANILLA_WOOD_HIT : BlockSounds.VANILLA_STONE_HIT;
-            case STEP:
-                return isWood ? BlockSounds.VANILLA_WOOD_STEP : BlockSounds.VANILLA_STONE_STEP;
-            case FALL:
-                return isWood ? BlockSounds.VANILLA_WOOD_FALL : BlockSounds.VANILLA_STONE_FALL;
-            default:
-                return null;
-        }
-    }
-
-    private enum SoundType {
-        PLACE, BREAK, HIT, FALL, STEP
+        block.getWorld().playSound(block.getLocation(), sound, SoundCategory.PLAYERS, volume, pitch);
     }
 }
