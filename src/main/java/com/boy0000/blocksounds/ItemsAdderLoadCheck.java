@@ -10,7 +10,6 @@ public class ItemsAdderLoadCheck implements Listener {
     @EventHandler
     public void onItemsAdderLoad(ItemsAdderLoadDataEvent event) {
         if (event.getCause() == ItemsAdderLoadDataEvent.Cause.FIRST_LOAD) {
-            BlockSoundPlugin.plugin.saveDefaultConfig();
             BlockSoundConfig.loadConfig();
             BlockSoundPlugin.plugin.extractSoundJson();
 
